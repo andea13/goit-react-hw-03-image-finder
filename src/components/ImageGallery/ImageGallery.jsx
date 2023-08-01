@@ -1,5 +1,13 @@
 import React from 'react';
+// import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem'
 
-export const ImageGallery = () => {
-  return <ul class="gallery"></ul>;
+export const ImageGallery = (images) => {
+  console.log(images);
+  return <ul className="gallery">{images}
+    
+    
+
+
+    {/* <ImageGalleryItem id={id} webformatURL={webformatURL} largeImageURL={largeImageURL} /> */}
+  </ul>;
 };
