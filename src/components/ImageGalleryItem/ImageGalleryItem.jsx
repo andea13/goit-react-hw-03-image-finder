@@ -1,8 +1,10 @@
 import React from 'react';
 
-export const ImageGalleryItem = (id, webformatURL, largeImageURL) => {
+export const ImageGalleryItem = ({
+  image: { id, webformatURL, largeImageURL },
+}) => {
   return (
-    <li className="gallery-item" key={id}>
+    <li className="gallery-item">
       <img src={webformatURL} alt={largeImageURL} />
     </li>
   );

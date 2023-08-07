@@ -1,13 +1,13 @@
-import React from 'react';
-// import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem'
+import React, { Component } from 'react';
+import { fetchImagesByQuery } from 'service/utils';
+import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 
-export const ImageGallery = (images) => {
-  console.log(images);
-  return <ul className="gallery">{images}
-    
-    
-
-
-    {/* <ImageGalleryItem id={id} webformatURL={webformatURL} largeImageURL={largeImageURL} /> */}
-  </ul>;
+export const ImageGallery = ({ images }) => {
+  return (
+    <ul className="gallery">
+      {images.map(image => (
+        <ImageGalleryItem image={image} key={image.id} />
+      ))}
+    </ul>
+  );
 };

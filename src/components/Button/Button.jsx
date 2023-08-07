@@ -1,5 +1,5 @@
 import React from 'react';
 
-export const Button = () => {
-  return <button>Load more</button>;
+export const Button = ({ onNextPage }) => {
+  return <button onClick={onNextPage}>Load more</button>;
 };
