@@ -1,11 +1,15 @@
 import React from 'react';
+import {
+  ImageGalleryItemWrapper,
+  ImageGalleryItemImage,
+} from './ImageGalleryItem.styled';
 
 export const ImageGalleryItem = ({
   image: { id, webformatURL, largeImageURL },
 }) => {
   return (
-    <li className="gallery-item">
-      <img src={webformatURL} alt={largeImageURL} />
-    </li>
+    <ImageGalleryItemWrapper>
+      <ImageGalleryItemImage src={webformatURL} alt={largeImageURL} />
+    </ImageGalleryItemWrapper>
   );
 };

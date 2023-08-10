@@ -3,6 +3,7 @@ import Searchbar from './Searchbar/Searchbar';
 import { ImageGallery } from '../components/ImageGallery/ImageGallery';
 import { Button } from '../components/Button/Button';
 import { fetchImagesByQuery } from 'service/utils';
+import { AppContainer } from './App.styled';
 
 class App extends Component {
   state = {
@@ -95,21 +96,12 @@ class App extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 40,
-          color: '#010101',
-        }}
-      >
+      <AppContainer>
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
 
         <ImageGallery images={this.state.images} />
         <Button onNextPage={this.onNextPage} />
-      </div>
+      </AppContainer>
     );
   }
 }

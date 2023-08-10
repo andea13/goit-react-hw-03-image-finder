@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 // import { FetchImages } from 'service/utils';
+import {
+  SearchWrapper,
+  SearchForm,
+  SearchFormButton,
+  SearchFormButtonLabel,
+  SearchFormInput,
+} from './Searchbar.styled';
 
 class Searchbar extends Component {
   state = {
@@ -35,13 +42,13 @@ class Searchbar extends Component {
 
   render() {
     return (
-      <header className="searchbar">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
-          </button>
+      <SearchWrapper>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchFormButton type="submit">
+            <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+          </SearchFormButton>
 
-          <input
+          <SearchFormInput
             value={this.state.input}
             onChange={this.handleInput}
             className="input"
@@ -50,8 +57,8 @@ class Searchbar extends Component {
             autoFocus
             placeholder="Search images and photos"
           />
-        </form>
-      </header>
+        </SearchForm>
+      </SearchWrapper>
     );
   }
 }
