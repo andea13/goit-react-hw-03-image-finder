@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import { ImageGallery } from '../components/ImageGallery/ImageGallery';
 import { Button } from '../components/Button/Button';
+import { Loader } from './Loader/Loader';
 import { fetchImagesByQuery } from 'service/utils';
 import { AppContainer } from './App.styled';
 
@@ -12,28 +13,10 @@ class App extends Component {
     page: 1,
   };
 
-  // async componentDidMount() {
-  //   try {
-  //     let q = this.state.inputText;
-  //     let data = await fetchImages(q);
-
-  //     console.log(data);
-  //     this.setState({
-  //       images: data,
-  //     });
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }
-
   handleSearchbarSubmit = input => {
     console.log(input);
     this.setState({ input });
   };
-
-  // componentDidMount() {
-  //   this.handleData();
-  // }
 
   componentDidUpdate(prevProps, prevState) {
     const prevInput = prevState.input;
@@ -44,11 +27,6 @@ class App extends Component {
       this.handleData(nextInput, 1).then(images => {
         this.setState({ page: 1, images });
       });
-
-      // if (data.hits.length <= 0) {
-      //   return;
-      // }
-      // this.setState({ images: data });
     }
   }
 
@@ -66,41 +44,40 @@ class App extends Component {
 
   onNextPage = async () => {
     let newPage = this.state.page + 1;
+    console.log(newPage);
+    this.setState({ isLoading: true });
     const newImages = await this.handleData(this.state.input, newPage);
     this.setState(prevState => ({
       page: newPage,
       images: [...prevState.images, ...newImages],
+      isLoading: false,
     }));
   };
 
-  // async componentDidMount() {
-  //   const BASE_URL = 'https://pixabay.com/api/';
-  //   const KEY = '36804541-6df310b69146ced50149f1ae2';
+  hideLoadMore() {
+    console.log(this.state.page);
+    if (this.state.images.length < 12) {
+      return null;
+    }
+  }
 
-  //   try {
-  //     let result = await axios.get(
-  //       `${BASE_URL}?key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
-  //     );
-  //     let data = result.data;
-
-  //     this.setState({
-  //       images: data,
-  //     });
-  //     // console.log(data);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }
-
-  // componentDidUpdate(prev)
+  showLoadMore() {
+    if (this.state.images.length > 12) {
+    }
+  }
 
   render() {
+    console.log(this.state.images.length);
+
     return (
       <AppContainer>
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
-
+        {this.state.isLoading === true && <Loader />}
         <ImageGallery images={this.state.images} />
-        <Button onNextPage={this.onNextPage} />
+        {this.state.images.length >= 12 && (
+          <Button onNextPage={this.onNextPage} />
+        )}
+        {this.state.isLoading === true && <Loader />}
       </AppContainer>
     );
   }
