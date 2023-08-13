@@ -3,6 +3,8 @@ import Searchbar from './Searchbar/Searchbar';
 import { ImageGallery } from '../components/ImageGallery/ImageGallery';
 import { Button } from '../components/Button/Button';
 import { Loader } from './Loader/Loader';
+import Modal from './Modal/Modal';
+
 import { fetchImagesByQuery } from 'service/utils';
 import { AppContainer } from './App.styled';
 
@@ -11,11 +13,9 @@ class App extends Component {
     input: '',
     images: [],
     page: 1,
-  };
-
-  handleSearchbarSubmit = input => {
-    console.log(input);
-    this.setState({ input });
+    showModal: false,
+    total: 0,
+    largeImageURL: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -24,11 +24,16 @@ class App extends Component {
     const nextInput = this.state.input;
 
     if (prevInput !== nextInput) {
-      this.handleData(nextInput, 1).then(images => {
-        this.setState({ page: 1, images });
+      this.handleData(nextInput, 1).then(({ total, hits }) => {
+        this.setState({ page: 1, images: hits, total });
       });
     }
   }
+
+  handleSearchbarSubmit = input => {
+    console.log(input);
+    this.setState({ input });
+  };
 
   handleData = async (query, page) => {
     try {
@@ -36,7 +41,7 @@ class App extends Component {
       const data = await fetchImagesByQuery(query, page);
       console.log(data);
       this.setState({ isLoading: false });
-      return data.hits;
+      return data;
     } catch (error) {
       this.setState({ error: error.message, isLoading: false });
     }
@@ -46,25 +51,36 @@ class App extends Component {
     let newPage = this.state.page + 1;
     console.log(newPage);
     this.setState({ isLoading: true });
-    const newImages = await this.handleData(this.state.input, newPage);
+    const { hits } = await this.handleData(this.state.input, newPage);
     this.setState(prevState => ({
       page: newPage,
-      images: [...prevState.images, ...newImages],
+      images: [...prevState.images, ...hits],
       isLoading: false,
     }));
   };
 
-  hideLoadMore() {
-    console.log(this.state.page);
-    if (this.state.images.length < 12) {
-      return null;
-    }
-  }
+  toggleModal = () => {
+    this.setState(state => ({
+      showModal: !state.showModal,
+    }));
+  };
 
-  showLoadMore() {
-    if (this.state.images.length > 12) {
-    }
-  }
+  handleModal = image => {
+    this.toggleModal();
+    this.setState({ largeImageURL: image.largeImageURL });
+  };
+
+  // hideLoadMore() {
+  //   console.log(this.state.page);
+  //   if (this.state.images.length < 12) {
+  //     return null;
+  //   }
+  // }
+
+  // showLoadMore() {
+  //   if (this.state.images.length > 12) {
+  //   }
+  // }
 
   render() {
     console.log(this.state.images.length);
@@ -72,12 +88,20 @@ class App extends Component {
     return (
       <AppContainer>
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
-        {this.state.isLoading === true && <Loader />}
-        <ImageGallery images={this.state.images} />
-        {this.state.images.length >= 12 && (
+        <ImageGallery
+          images={this.state.images}
+          handleModal={this.handleModal}
+        />
+        {this.state.isLoading && <Loader />}
+        {this.state.images.length < this.state.total && (
           <Button onNextPage={this.onNextPage} />
         )}
-        {this.state.isLoading === true && <Loader />}
+
+        {this.state.showModal === true && (
+          <Modal toggleModal={this.toggleModal}>
+            <img src={this.state.largeImageURL} alt="" />
+          </Modal>
+        )}
       </AppContainer>
     );
   }

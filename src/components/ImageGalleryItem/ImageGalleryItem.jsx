@@ -6,10 +6,15 @@ import {
 
 export const ImageGalleryItem = ({
   image: { id, webformatURL, largeImageURL },
+  handleOpen,
 }) => {
   return (
     <ImageGalleryItemWrapper>
-      <ImageGalleryItemImage src={webformatURL} alt={largeImageURL} />
+      <ImageGalleryItemImage
+        src={webformatURL}
+        alt={largeImageURL}
+        onClick={handleOpen}
+      />
     </ImageGalleryItemWrapper>
   );
 };
