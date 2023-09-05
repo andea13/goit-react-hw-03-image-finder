@@ -70,18 +70,6 @@ class App extends Component {
     this.setState({ largeImageURL: image.largeImageURL });
   };
 
-  // hideLoadMore() {
-  //   console.log(this.state.page);
-  //   if (this.state.images.length < 12) {
-  //     return null;
-  //   }
-  // }
-
-  // showLoadMore() {
-  //   if (this.state.images.length > 12) {
-  //   }
-  // }
-
   render() {
     console.log(this.state.images.length);
 
