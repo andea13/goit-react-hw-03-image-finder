@@ -1,35 +1,39 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Overlay, ModalWindow } from './Modal.styled';
 
-// export const Modal = ({ images }) => {
-//   return (
-//     <Overlay>
-//       <ModalWindow>
-//         {images.map(image => (
-//           <img src={image.largeImageURL} alt="" key={image.id} />
-//         ))}
-//       </ModalWindow>
-//     </Overlay>
-//   );
-// };
+class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
 
-export default class Modal extends Component {
-  // componentDidMount() {
-  //   window.addEventListener('click', e => {
-  //     console.log(e.currentTarget);
-  //     if (e.target !== e.currentTarget) {
-  //       this.props.onModalToggle();
-  //     }
-  //   });
-  // }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = e => {
+    if (e.code === 'Escape') {
+      this.props.toggleModal();
+    }
+  };
+
+  handleBackdropClick = e => {
+    if (e.currentTarget === e.target) {
+      this.props.toggleModal();
+    }
+  };
 
   render() {
     return (
-      <Overlay onClick={this.props.toggleModal}>
-        <ModalWindow onClick={e => e.stopPropagation()}>
-          {this.props.children}
-        </ModalWindow>
+      <Overlay onClick={this.handleBackdropClick}>
+        <ModalWindow>{this.props.children}</ModalWindow>
       </Overlay>
     );
   }
 }
+
+Modal.propTypes = {
+  toggleModal: PropTypes.func.isRequired,
+};
+
+export default Modal;

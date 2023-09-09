@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Searchbar from './Searchbar/Searchbar';
-import { ImageGallery } from '../components/ImageGallery/ImageGallery';
-import { Button } from '../components/Button/Button';
+import ImageGallery from '../components/ImageGallery/ImageGallery';
+import Button from '../components/Button/Button';
 import { Loader } from './Loader/Loader';
 import Modal from './Modal/Modal';
 
@@ -60,8 +60,8 @@ class App extends Component {
   };
 
   toggleModal = () => {
-    this.setState(state => ({
-      showModal: !state.showModal,
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
     }));
   };
 
@@ -71,8 +71,6 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.state.images.length);
-
     return (
       <AppContainer>
         <Searchbar onSubmit={this.handleSearchbarSubmit} />

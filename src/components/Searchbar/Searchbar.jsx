@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { FetchImages } from 'service/utils';
+import PropTypes from 'prop-types';
 import {
   SearchWrapper,
   SearchForm,
@@ -29,16 +29,7 @@ class Searchbar extends Component {
     }
 
     this.props.onSubmit(this.state.input);
-    // this.setState({ input: '' });
   };
-
-  // async componentDidUpdate(prevState) {
-  //   if (prevState.input !== this.state.input) {
-  //     let result = await fetchImages();
-  //     let data = await result.data;
-  //     console.log(data);
-  //   }
-  // }
 
   render() {
     return (
@@ -62,5 +53,9 @@ class Searchbar extends Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default Searchbar;

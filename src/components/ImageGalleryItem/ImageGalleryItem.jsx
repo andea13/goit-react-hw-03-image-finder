@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import {
   ImageGalleryItemWrapper,
   ImageGalleryItemImage,
@@ -17,4 +19,13 @@ export const ImageGalleryItem = ({
       />
     </ImageGalleryItemWrapper>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  image: PropTypes.shape({
+    id: PropTypes.number,
+    webformatURL: PropTypes.string,
+    largeImageURL: PropTypes.string,
+  }),
+  handleOpen: PropTypes.func.isRequired,
 };
