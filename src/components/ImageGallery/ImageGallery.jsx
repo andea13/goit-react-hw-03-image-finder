@@ -10,7 +10,7 @@ export const ImageGallery = ({ images, handleModal }) => {
         <ImageGalleryItem
           image={image}
           key={image.id}
-          handleOpen={() => handleModal(image)}
+          handleModal={handleModal}
         />
       ))}
     </ImageGalleryList>

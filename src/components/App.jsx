@@ -23,16 +23,38 @@ class App extends Component {
 
     const nextInput = this.state.input;
 
+    // const newPage = this.onNextPage();
+
     if (prevInput !== nextInput) {
+      this.setState({
+        images: [],
+        isLoading: true,
+      });
+
       this.handleData(nextInput, 1).then(({ total, hits }) => {
-        this.setState({ page: 1, images: hits, total });
+        this.setState({ images: hits, total, isLoading: false });
       });
     }
+    // if (prevState.page !== newPage) {
+    // this.setState({ isLoading: true });
+
+    // Call this.handleData with the newPage value
+    // this.handleData(nextInput, newPage).then(({ hits }) => {
+    //   this.setState(prevState => ({
+    // page: newPage,
+    //       images: [...prevState.images, ...hits],
+    //       isLoading: false,
+    //     }));
+    //   });
+    // }
   }
 
   handleSearchbarSubmit = input => {
     console.log(input);
-    this.setState({ input });
+    this.setState({
+      input,
+      page: 1,
+    });
   };
 
   handleData = async (query, page) => {
@@ -47,9 +69,10 @@ class App extends Component {
     }
   };
 
-  onNextPage = async () => {
-    let newPage = this.state.page + 1;
+  onNextPage = async newPage => {
+    newPage = this.state.page + 1;
     console.log(newPage);
+
     this.setState({ isLoading: true });
     const { hits } = await this.handleData(this.state.input, newPage);
     this.setState(prevState => ({
@@ -74,14 +97,22 @@ class App extends Component {
     return (
       <AppContainer>
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
-        <ImageGallery
-          images={this.state.images}
-          handleModal={this.handleModal}
-        />
-        {this.state.isLoading && <Loader />}
-        {this.state.images.length < this.state.total && (
-          <Button onNextPage={this.onNextPage} />
+        {this.state.images.length > 0 && (
+          <ImageGallery
+            images={this.state.images}
+            handleModal={this.handleModal}
+          />
         )}
+
+        {this.state.isLoading && <Loader />}
+        {this.state.isLoading === false &&
+          this.state.images.length < this.state.total && (
+            <Button
+              onNextPage={this.onNextPage}
+              // handleData={this.handleData}
+              // input={this.state.input}
+            />
+          )}
 
         {this.state.showModal === true && (
           <Modal toggleModal={this.toggleModal}>
