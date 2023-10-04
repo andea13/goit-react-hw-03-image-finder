@@ -13,6 +13,7 @@ class App extends Component {
     input: '',
     images: [],
     page: 1,
+    isLoading: false,
     showModal: false,
     total: 0,
     largeImageURL: null,
@@ -23,7 +24,9 @@ class App extends Component {
 
     const nextInput = this.state.input;
 
-    // const newPage = this.onNextPage();
+    const prevPage = this.state.page;
+
+    const nextPage = this.onNextPage();
 
     if (prevInput !== nextInput) {
       this.setState({
@@ -34,19 +37,16 @@ class App extends Component {
       this.handleData(nextInput, 1).then(({ total, hits }) => {
         this.setState({ images: hits, total, isLoading: false });
       });
-    }
-    // if (prevState.page !== newPage) {
-    // this.setState({ isLoading: true });
+    } else if (prevPage !== nextPage) {
+      this.setState({ isLoading: true });
 
-    // Call this.handleData with the newPage value
-    // this.handleData(nextInput, newPage).then(({ hits }) => {
-    //   this.setState(prevState => ({
-    // page: newPage,
-    //       images: [...prevState.images, ...hits],
-    //       isLoading: false,
-    //     }));
-    //   });
-    // }
+      this.handleData(nextInput, nextPage).then(({ total, hits }) => {
+        this.setState(prevState => ({
+          images: [...prevState.images, ...hits],
+          isLoading: false,
+        }));
+      });
+    }
   }
 
   handleSearchbarSubmit = input => {
@@ -69,18 +69,24 @@ class App extends Component {
     }
   };
 
-  onNextPage = async newPage => {
-    newPage = this.state.page + 1;
-    console.log(newPage);
-
-    this.setState({ isLoading: true });
-    const { hits } = await this.handleData(this.state.input, newPage);
+  onNextPage = () => {
     this.setState(prevState => ({
-      page: newPage,
-      images: [...prevState.images, ...hits],
-      isLoading: false,
+      page: prevState.page + 1,
     }));
   };
+
+  // onNextPage = async newPage => {
+  //   newPage = this.state.page + 1;
+  //   console.log(newPage);
+
+  //   this.setState({ isLoading: true });
+  //   const { hits } = await this.handleData(this.state.input, newPage);
+  //   this.setState(prevState => ({
+  //     page: newPage,
+  //     images: [...prevState.images, ...hits],
+  //     isLoading: false,
+  //   }));
+  // };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({
