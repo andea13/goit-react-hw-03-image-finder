@@ -24,9 +24,10 @@ class App extends Component {
 
     const nextInput = this.state.input;
 
-    const prevPage = this.state.page;
+    const prevPage = prevState.page;
 
-    const nextPage = this.onNextPage();
+    const nextPage = this.state.page;
+    console.log(nextPage);
 
     if (prevInput !== nextInput) {
       this.setState({
@@ -38,11 +39,10 @@ class App extends Component {
         this.setState({ images: hits, total, isLoading: false });
       });
     } else if (prevPage !== nextPage) {
-      this.setState({ isLoading: true });
-
       this.handleData(nextInput, nextPage).then(({ total, hits }) => {
         this.setState(prevState => ({
           images: [...prevState.images, ...hits],
+          total,
           isLoading: false,
         }));
       });
@@ -75,19 +75,6 @@ class App extends Component {
     }));
   };
 
-  // onNextPage = async newPage => {
-  //   newPage = this.state.page + 1;
-  //   console.log(newPage);
-
-  //   this.setState({ isLoading: true });
-  //   const { hits } = await this.handleData(this.state.input, newPage);
-  //   this.setState(prevState => ({
-  //     page: newPage,
-  //     images: [...prevState.images, ...hits],
-  //     isLoading: false,
-  //   }));
-  // };
-
   toggleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
@@ -113,11 +100,7 @@ class App extends Component {
         {this.state.isLoading && <Loader />}
         {this.state.isLoading === false &&
           this.state.images.length < this.state.total && (
-            <Button
-              onNextPage={this.onNextPage}
-              // handleData={this.handleData}
-              // input={this.state.input}
-            />
+            <Button onNextPage={this.onNextPage} />
           )}
 
         {this.state.showModal === true && (
